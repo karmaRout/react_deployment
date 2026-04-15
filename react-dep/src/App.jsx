@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-      HELLO SW
+      HELLO INDIA
     </>
   )
 }
