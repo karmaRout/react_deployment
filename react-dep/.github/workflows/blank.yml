@@ -1,27 +1,28 @@
-name: CI
+name: Build & Deploy React App
 
 on:
   push:
     branches: ["main"]
-  pull_request:
-    branches: ["main"]
-  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # Required for full history (important for Sonar)
-      - name: Fetch full history
-        run: git fetch --unshallow || true
+      - name: Install dependencies
+        run: npm install
 
-      # SonarCloud Scan
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to GitHub Pages (using custom token)
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          projectBaseDir: .
-        env:
-          github_token: ${{ secrets.TOKEN }}
+          personal_token: ${{ secrets.TOKEN }}
+          publish_dir: ./build
