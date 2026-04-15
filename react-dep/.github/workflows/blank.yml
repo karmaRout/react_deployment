@@ -3,6 +3,7 @@ name: Build & Deploy React App
 on:
   push:
     branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -21,7 +22,7 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy to GitHub Pages (using custom token)
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.TOKEN }}
