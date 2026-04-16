@@ -3,7 +3,6 @@ name: Build & Deploy React App
 on:
   push:
     branches: ["main"]
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -12,9 +11,18 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
       - name: Install dependencies
         run: npm install
@@ -22,8 +30,8 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
-          personal_token: ${{ secrets.TOKEN }}
+          github_token: ${{ secrets.TOKEN }}
           publish_dir: ./dist
